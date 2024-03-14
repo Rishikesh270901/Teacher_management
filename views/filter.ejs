@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body style="margin: 0px; background-color:azure">
+    <div>
+        <div>
+            <h1 id="school-name" style="background-color: cadetblue; margin:0px; height:100px; display:flex; align-items:center; justify-content:center; font-size:50px; color:white">Teacher Management Application</h1>
+        </div>
+      <div style="background-color: orangered; margin: 0px">
+        <hr style="margin: 0px" />
+        <hr class="hr" />
+      </div>
+      <ul style="display: flex; flex-wrap: wrap; justify-content: space-between; margin-right:100px">
+        <% filterTeacher.forEach(function(teacher) { %>
+            <li style="border: 1px solid black; border-radius : 5px; list-style:none; margin-bottom:10px; padding-left:100px ;width:300px; background-color:white"><p>Name: <%= teacher.fullname %></p> <p>Age: <%= teacher.age %></p><p>Date of Birth: <%= teacher.date_of_birth %></p><p>Number of classes Taken: <%= teacher.number_of_classes %></p> <p>Subject: <%= teacher.subject %></p> <p>Experience (in Years): <%= teacher.experience %></p>
+            <div style="margin-bottom: 5px; margin-left:50px"><a href="/update-teacher/<%=teacher.id%>" style="color: black;"><i class="fa fa-pencil-square-o" aria-hidden="true" style="font-size: 24px;"></i></a> <a href="#" style="color: black; margin-left:20px"><i class="fa fa-trash-o" aria-hidden="true" style="font-size: 24px;"></i></a></div></li>
+        <% }); %>
+    </ul>
+    <button style="margin-left:1400px; height:40px"><a href="/" style="text-decoration: none; color:black">Home Page</a></button>
+  </body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body style="margin: 0px; background-color:azure">
+    <div>
+        <div>
+            <h1 id="school-name" style="background-color: cadetblue; margin:0px; height:100px; display:flex; align-items:center; justify-content:center; font-size:50px; color:white">Teacher Management Application</h1>
+        </div>
+      <div style="background-color: orangered; margin: 0px">
+        <hr style="margin: 0px" />
+        <hr class="hr" />
+      </div>
+      <form action="/search" method="GET">
+        <input
+          type="text"
+          placeholder="Search.."
+          name="fullname"
+          style="
+            border: 0.5px solid balck;
+            border-radius: 7px;
+            height: 30px;
+            padding-left: 10px;
+            margin-left:35%;
+          "
+          size="50"
+        />
+        <input type="submit" value="submit" style="
+        width: auto;
+        height: 30px;
+        font-size: larger;
+        margin-left:10px; margin-top:5px">
+        <button
+          style="
+            margin-right: 200px;
+            width: auto;
+            height: 30px;
+            font-size: larger;
+            margin-left:100px
+          "
+        >
+          <a href="/add-teacher" style="text-decoration: none; color: black">Add Details</a>
+        </button>
+      </form>
+      <hr>
+      <form action="/filter" method="GET" style="display: flex; align-items:center">
+        <label for="age-classes" style="font-size: x-large; margin-left:250px; color:darkmagenta; font-weight:500">Filter by Age and Number of Classes</label>
+        <input type="number" name="age" placeholder="Age..." style="
+        border: 0.5px solid balck;
+        border-radius: 7px;
+        height: 30px;
+        width:200px;
+        padding-left: 10px;
+        margin-left:5%;
+      "
+      size="50">
+        <input type="number" name="number_of_classes" placeholder="Number of classes..." style="
+        border: 0.5px solid balck;
+        border-radius: 7px;
+        height: 30px;
+        width: 200px;
+        padding-left: 10px;
+        margin-left:1%;
+      "
+      size="50">
+      <input type="submit" value="submit" style="
+      width: auto;
+      height: 30px;
+      font-size: larger;
+      margin-left:40px; margin-top:5px">
+      </form>
+      <hr />
+      <div style="margin-left: 200px;">
+        <span class="list" style="font-size: 30px;">Teachers List</span>
+        <hr style="margin-top: 5px;margin-right:1100px " />
+      </div>
+      <ul style="display: flex; flex-wrap: wrap; justify-content: space-between; margin-right:100px">
+        <% teachers.forEach(function(teacher) { %>
+            <li style="border: 1px solid black; border-radius : 5px; list-style:none; margin-bottom:10px; padding-left:100px ;width:300px; background-color:white"><p>Name: <%= teacher.fullname %></p> <p>Age: <%= teacher.age %></p><p>Date of Birth: <%= teacher.date_of_birth %></p><p>Number of classes Taken: <%= teacher.number_of_classes %></p> <p>Subject: <%= teacher.subject %></p> <p>Experience (in Years): <%= teacher.experience %></p>
+            <div style="margin-bottom: 5px; margin-left:50px"><a href="/update-teacher/<%=teacher.id%>" style="color: black;"><i class="fa fa-pencil-square-o" aria-hidden="true" style="font-size: 24px;"></i></a> <a href="/delete/<%=teacher.id%>" style="color: black; margin-left:20px"><i class="fa fa-trash-o" aria-hidden="true" style="font-size: 24px;"></i></a></div></li>
+        <% }); %>
+    </ul>
+  </body>
+</html>
