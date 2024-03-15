@@ -3,7 +3,7 @@ const getAllTeachersDetailsCtrl = (req, res) => {
   fs.readFile("./db/teachers.js", "utf8", (err, data) => {
     if (err) {
       console.error("Error reading file:", err);
-      return res.status(500).send("Error reading file");
+      return res.render("error.ejs", { error: err });
     }
 
     try {
@@ -14,7 +14,7 @@ const getAllTeachersDetailsCtrl = (req, res) => {
       res.render("home.ejs", { teachers: teachersData });
     } catch (error) {
       console.error("Error parsing JSON:", error);
-      return res.status(500).send("Error parsing JSON");
+      return res.render("error.ejs", { error: err });
     }
   });
 };
@@ -23,8 +23,7 @@ const addDetailsCtrl = (req, res) => {
   console.log(req.body, "hi");
   fs.readFile("./db/teachers.js", "utf8", (err, data) => {
     if (err) {
-      console.error("Error reading file:", err);
-      return;
+      return res.render("error.ejs", { error: err });
     }
 
     // Parse the existing JSON data into an array
@@ -38,6 +37,16 @@ const addDetailsCtrl = (req, res) => {
       subject,
       experience,
     } = req.body;
+    if (
+      !fullname ||
+      !age ||
+      !date_of_birth ||
+      !number_of_classes ||
+      !subject ||
+      !experience
+    ) {
+      return res.render("error.ejs", { error: "Please fill all the details" });
+    }
     const newTeacher = {
       id: existingData.length + 1,
       fullname,
@@ -57,7 +66,7 @@ const addDetailsCtrl = (req, res) => {
     fs.writeFile("./db/teachers.js", newDataString, "utf8", (err) => {
       if (err) {
         console.error("Error writing file:", err);
-        return;
+        return res.render("error.ejs", { error: err });
       }
       console.log("New teacher added successfully.");
       console.log(existingData);
@@ -71,8 +80,7 @@ const updateDetailsCtrl = (req, res) => {
   fs.readFile("./db/teachers.js", "utf8", (err, data) => {
     if (err) {
       console.error("Error reading file:", err);
-      res.status(500).json({ error: "Error reading file" });
-      return;
+      return res.render("error.ejs", { error: err });
     }
 
     const teachersData = JSON.parse(data);
@@ -89,8 +97,7 @@ const updateDetailsCtrl = (req, res) => {
     let teacherToUpdate = teachersData.find((teacher) => teacher.id === id);
     if (!teacherToUpdate) {
       console.log("Teacher not found");
-      res.status(404).json({ error: "Teacher not found" });
-      return;
+      return res.render("error.ejs", { error: err });
     }
 
     // Update teacher details
@@ -108,8 +115,7 @@ const updateDetailsCtrl = (req, res) => {
       (err) => {
         if (err) {
           console.error("Error updating file:", err);
-          res.status(500).json({ error: "Error updating file" });
-          return;
+          return res.render("error.ejs", { error: err });
         }
         console.log("File updated successfully.");
         res.render("home.ejs", { teachers: teachersData });
@@ -149,7 +155,7 @@ const searchTeacherCtrl = (req, res) => {
   fs.readFile("./db/teachers.js", "utf8", (err, data) => {
     if (err) {
       console.error("Error reading file:", err);
-      return res.status(500).json({ error: "Error reading file" });
+      return res.render("error.ejs", { error: err });
     }
 
     const fullname = req.query;
@@ -163,72 +169,57 @@ const searchTeacherCtrl = (req, res) => {
       }
     }
     // console.log(teacherDataRetrieved);
-    // if (matchedTeachers.length === 0) {
-    //   // Handle case where no teachers are found
-    //   return res.status(404).render("search.ejs", { searchTeacher: null });
-    // }
+    if (teacherDataRetrieved.length === 0) {
+      return res.render("error.ejs", { error: "No entry found" });
+    }
 
-    // Render the search results with the matched teachers
     res.render("search.ejs", { searchTeacher: teacherDataRetrieved });
   });
 };
 
-// const filterTeacherCtrl = (req, res) => {
-//   fs.readFile("./db/teachers.js", "utf8", (err, data) => {
-//     if (err) {
-//       console.error("Error reading file:", err);
-//       return res.status(500).json({ error: "Error reading file" });
-//     }
-
-//     const { age, number_of_classes } = req.query;
-//     console.log(age, number_of_classes);
-//     const teachersData = JSON.parse(data);
-//     // console.log(teachersData);
-//     let teacherDataRetrieved = [];
-//     for (let i = 0; i < teachersData.length; i++) {
-//       if (
-//         teachersData[i].age === age &&
-//         teachersData[i].number_of_classes === number_of_classes
-//       ) {
-//         // console.log(teachersData[i]);
-//         teacherDataRetrieved.push(teachersData[i]);
-//       }
-//     }
-//     console.log(teacherDataRetrieved);
-//     // // if (matchedTeachers.length === 0) {
-//     // //   // Handle case where no teachers are found
-//     // //   return res.status(404).render("search.ejs", { searchTeacher: null });
-//     // // }
-
-//     // // Render the search results with the matched teachers
-//     res.render("filter.ejs", { filterTeacher: teacherDataRetrieved });
-//   });
-// };
 const filterTeacherCtrl = (req, res) => {
   fs.readFile("./db/teachers.js", "utf8", (err, data) => {
     if (err) {
       console.error("Error reading file:", err);
-      return res.status(500).json({ error: "Error reading file" });
+      // return res.status(500).json({ error: "Error reading file" });
+      return res.render("error.ejs", { error: err });
     }
 
     const { age, number_of_classes } = req.query;
     const parsedAge = parseInt(age);
     const parsedClasses = parseInt(number_of_classes);
-
     const teachersData = JSON.parse(data);
-    let teacherDataRetrieved = [];
-
-    for (let i = 0; i < teachersData.length; i++) {
-      if (
-        teachersData[i].age === parsedAge &&
-        teachersData[i].number_of_classes === parsedClasses
-      ) {
-        teacherDataRetrieved.push(teachersData[i]);
-      }
+    if(!age && !number_of_classes){
+      res.render("error.ejs",{error : "No data found"});
     }
-    // if (teacherDataRetrieved.length === 0) {
-    //   // return res.render("no-results.ejs");
-    // }
+    let teacherDataRetrieved = [];
+    if(age && number_of_classes){
+      for (let i = 0; i < teachersData.length; i++) {
+        if (
+          parseInt(teachersData[i].age )=== parsedAge &&
+          parseInt(teachersData[i].number_of_classes) === parsedClasses
+        ) {
+          teacherDataRetrieved.push(teachersData[i]);
+        }
+      }
+      }
+      else{
+        if(age || number_of_classes){
+          for (let i = 0; i < teachersData.length; i++) {
+            if (
+              parseInt(teachersData[i].age )=== parsedAge ||
+              parseInt(teachersData[i].number_of_classes) === parsedClasses
+            ) {
+              teacherDataRetrieved.push(teachersData[i]);
+            }
+          }
+          }
+      }
+
+
+    if (teacherDataRetrieved.length === 0) {
+      res.render("error.ejs", { error: "No data found" });
+    }
 
     // Render the search results with the matched teachers
     res.render("filter.ejs", { filterTeacher: teacherDataRetrieved });
@@ -241,14 +232,16 @@ const getTeacherByIdCtrl = (req, res) => {
   fs.readFile("./db/teachers.js", "utf8", (err, data) => {
     if (err) {
       console.error("Error reading file:", err);
-      return res.status(500).json({ error: "Error reading file" });
+      // return res.status(500).json({ error: "Error reading file" });
+      return res.render("error.ejs", { error: err });
     }
 
     const teachersData = JSON.parse(data);
     const dataFound = teachersData.find((teacher) => teacher.id === id);
     console.log(dataFound);
     // console.log(dataFound);
-    if (!dataFound) res.json({ error: "Teacher not found" });
+    if (!dataFound)
+      return res.render("error.ejs", { error: "Teacher not found" });
     res.render("update.ejs", { teachers: dataFound });
   });
 };
@@ -257,8 +250,7 @@ const deleteTeacherCtrl = (req, res) => {
   fs.readFile("./db/teachers.js", "utf8", (err, data) => {
     if (err) {
       console.error("Error reading file:", err);
-      res.status(500).json({ error: "Error reading file" });
-      return;
+      return res.render("error.ejs", { error: err });
     }
     const id = parseInt(req.params.id);
     console.log(id);

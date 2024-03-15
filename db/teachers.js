@@ -124,5 +124,14 @@
     "number_of_classes": "3",
     "subject": "RAC",
     "experience": "2"
+  },
+  {
+    "id": 15,
+    "fullname": "Manoj",
+    "age": "21",
+    "date_of_birth": "2002-01-01",
+    "number_of_classes": "4",
+    "subject": "AMP",
+    "experience": "4"
   }
 ]
