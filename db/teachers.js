@@ -92,20 +92,11 @@
   {
     "id": 12,
     "fullname": "Akhil",
-    "age": 21,
-    "date_of_birth": "1992-08-05",
-    "number_of_classes": 4,
+    "age": "21",
+    "date_of_birth": "2002-08-05",
+    "number_of_classes": "4",
     "subject": "Literature",
-    "experience": 7
-  },
-  {
-    "id": 13,
-    "fullname": "Rishikesh",
-    "age": "22",
-    "date_of_birth": "2001-09-27",
-    "number_of_classes": "1",
-    "subject": "Physics",
-    "experience": "1"
+    "experience": "7"
   },
   {
     "id": 24,
